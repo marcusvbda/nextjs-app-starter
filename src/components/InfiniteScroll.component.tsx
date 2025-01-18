@@ -20,7 +20,7 @@ export const InfiniteScroll = ({
 }: IInfiniteScroll): ReactNode => {
   const [data, setData] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
@@ -54,7 +54,7 @@ export const InfiniteScroll = ({
           </div>
         )
       ) : (
-        total < data.length && <>Carregar mais</>
+        total !== null && <>{total > data.length && <>Carregar mais</>}</>
       )}
     </div>
   );
