@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { collection, getDocs, getFirestore, query } from "firebase/firestore";
 
-const db = getFirestore(
+export const db = getFirestore(
   initializeApp({
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -17,10 +17,12 @@ export const fetchDocs = async (collectionName: string, ...config: any) => {
   const q = query(collection(db, collectionName), ...config);
   const querySnapshot = await getDocs(q);
 
-  return querySnapshot.docs.map((doc: any) => {
+  const processed = await querySnapshot.docs.map((doc: any) => {
     return {
       id: doc.id,
       ...doc.data(),
     };
   });
+
+  return processed;
 };

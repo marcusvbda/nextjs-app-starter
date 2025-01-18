@@ -2,8 +2,8 @@
 import { SessionProviderContext } from "@/context/session.context";
 import Link from "next/link";
 import { useContext } from "react";
-import { Datatable } from "../components/Datatable.component";
 import { fetchExample } from "./actions";
+import { InfiniteScroll } from "@/components/InfiniteScroll.component";
 
 export default function ProtectedPage() {
   const { session } = useContext(SessionProviderContext);
@@ -29,23 +29,12 @@ export default function ProtectedPage() {
           </ul>
         </div>
       </div>
-      <Datatable
+      <InfiniteScroll
         fetchAction={fetchExample}
         perPage={3}
-        columns={[
-          {
-            name: "#",
-            body: (row: any) => row?.id,
-            // sortable: false,
-            index: "id",
-          },
-          {
-            name: "Linguagem",
-            body: (row: any) => row?.language,
-            // sortable: true,
-            index: "language",
-          },
-        ]}
+        renderRow={(index: number, row: any): any => {
+          return <h1 key={index}>{row.id}</h1>;
+        }}
       />
     </div>
   );
