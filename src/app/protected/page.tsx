@@ -2,7 +2,7 @@
 import { SessionProviderContext } from "@/context/session.context";
 import Link from "next/link";
 import { useContext } from "react";
-import { fetchExample } from "./actions";
+import { fetchExample, fetchTotalExample } from "./actions";
 import { InfiniteScroll } from "@/components/InfiniteScroll.component";
 
 export default function ProtectedPage() {
@@ -30,7 +30,8 @@ export default function ProtectedPage() {
         </div>
       </div>
       <InfiniteScroll
-        fetchAction={fetchExample}
+        fetchRows={fetchExample}
+        fetchTotal={fetchTotalExample}
         perPage={3}
         renderRow={(index: number, row: any): any => {
           return <h1 key={index}>{row.id}</h1>;

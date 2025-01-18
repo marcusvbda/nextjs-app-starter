@@ -1,5 +1,11 @@
 import { initializeApp } from "firebase/app";
-import { collection, getDocs, getFirestore, query } from "firebase/firestore";
+import {
+  collection,
+  getCountFromServer,
+  getDocs,
+  getFirestore,
+  query,
+} from "firebase/firestore";
 
 export const db = getFirestore(
   initializeApp({
@@ -25,4 +31,10 @@ export const fetchDocs = async (collectionName: string, ...config: any) => {
   });
 
   return processed;
+};
+
+export const getTotal = async (collectionName: string, ...config: any) => {
+  const q = query(collection(db, collectionName), ...config);
+  const resp = await getCountFromServer(q);
+  return resp.data().count;
 };

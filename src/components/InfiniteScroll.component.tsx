@@ -3,53 +3,59 @@ import { ReactNode, useEffect, useState } from "react";
 
 interface IInfiniteScroll {
   className?: string;
-  fetchAction: any;
+  fetchRows: any;
+  fetchTotal: any;
   perPage?: number;
   renderRow: any;
+  skeleton?: ReactNode;
 }
 
 export const InfiniteScroll = ({
   perPage = 10,
-  fetchAction,
+  fetchRows,
+  fetchTotal,
   className = "",
   renderRow,
-}: // perPageOptions = [10, 25, 50, 100],
-IInfiniteScroll): ReactNode => {
+  skeleton,
+}: IInfiniteScroll): ReactNode => {
   const [data, setData] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const [firstLoaded, setFirstLoaded] = useState(false);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
-    const _data: any = await fetchAction({
+    setLoading(true);
+    const _data: any = await fetchRows({
       page,
       perPage,
     });
     setData(_data || []);
     setLoading(false);
-    setFirstLoaded(true);
+  };
+
+  const loadTotal = async () => {
+    const _total = await fetchTotal();
+    setTotal(_total);
   };
 
   useEffect(() => {
-    loadData();
+    Promise.all([loadData(), loadTotal()]);
   }, [page]);
 
-  if (!firstLoaded) {
-    return (
-      <div className="w-full flex items-center justify-center py-10">
-        <span className="loading loading-spinner loading-md" />
-      </div>
-    );
-  }
-
   return (
-    <div className={`overflow-x-auto relative ${className}`}>
-      {loading && (
-        <div className="w-full flex items-center justify-center bg-gray-50/10 absolute inset-0 z-10 cursor-wait">
-          <span className="loading loading-spinner loading-md" />
-        </div>
-      )}
+    <div className={`overflow-x-auto  ${className}`}>
       {data.map((row: any, index: number) => renderRow(index, row))}
+      {loading ? (
+        skeleton ? (
+          skeleton
+        ) : (
+          <div className="w-full flex items-center justify-center py-10">
+            <span className="loading loading-spinner loading-md" />
+          </div>
+        )
+      ) : (
+        total < data.length && <>Carregar mais</>
+      )}
     </div>
   );
 };
