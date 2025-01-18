@@ -29,7 +29,6 @@ export const Datatable = ({
 }: // perPageOptions = [10, 25, 50, 100],
 IDatatable): ReactNode => {
   const [data, setData] = useState<any[]>([]);
-  const [totalRows, setTotalRows] = useState(0);
   const [page, setPage] = useState(1);
   const [sortDirection, setSortDirection] = useState("desc");
   const firstSortable = columns.find((x: any) => x.sortable);
@@ -46,10 +45,9 @@ IDatatable): ReactNode => {
       sortField,
       sortDirection,
     });
-    setData(_data?.items || []);
+    setData(_data || []);
     setLoading(false);
     setFirstLoaded(true);
-    setTotalRows(_data?.total || 0);
   };
 
   useEffect(() => {

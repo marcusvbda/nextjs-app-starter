@@ -2,11 +2,7 @@
 import { SessionProviderContext } from "@/context/session.context";
 import Link from "next/link";
 import { useContext } from "react";
-import {
-  Datatable,
-  IFetchAction,
-  IFetchActionResponse,
-} from "../components/Datatable.component";
+import { Datatable } from "../components/Datatable.component";
 import { fetchExample } from "./actions";
 
 export default function ProtectedPage() {
@@ -35,18 +31,19 @@ export default function ProtectedPage() {
       </div>
       <Datatable
         fetchAction={fetchExample}
+        perPage={3}
         columns={[
           {
-            name: "Name",
-            body: (row: any) => row?.name,
-            sortable: true,
-            index: "name",
+            name: "#",
+            body: (row: any) => row?.id,
+            // sortable: false,
+            index: "id",
           },
           {
-            name: "Age",
-            body: (row: any) => row?.age,
-            sortable: true,
-            index: "age",
+            name: "Linguagem",
+            body: (row: any) => row?.language,
+            // sortable: true,
+            index: "language",
           },
         ]}
       />
